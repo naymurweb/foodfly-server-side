@@ -53,6 +53,14 @@ const run = async () => {
       console.log(product);
     });
 
+    //new product add
+
+    app.post("/products", async (req, res) => {
+      const item = await productCollection.insertOne(req.body);
+      res.send(item);
+      console.log(item);
+    });
+
     // review get data
     app.get("/reviews", async (req, res) => {
       const query = {};
@@ -60,7 +68,7 @@ const run = async () => {
       const items = await cursor.toArray();
       res.send(items);
       console.log(items);
-    }); 
+    });
 
     // review data add
     app.post("/reviews", async (req, res) => {
@@ -68,6 +76,40 @@ const run = async () => {
       const item = await reviewCollection.insertOne(req.body);
       res.send(item);
       console.log(item);
+    });
+
+    // app.get("/reviews/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = { _id: ObjectId(id) };
+    //   const product = await reviewCollection.findOne(query);
+    //   res.send(product);
+    //   console.log(product);
+    // });
+
+    app.put("/reviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          massage: req.body.mass,
+        },
+      };
+      const result = await reviewCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
+      console.log(req.body);
+    });
+
+    app.delete("/reviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await reviewCollection.deleteOne(query);
+      res.send(result);
+      console.log(result);
     });
   } finally {
   }
