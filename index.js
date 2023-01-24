@@ -54,7 +54,6 @@ const run = async () => {
     });
 
     //new product add
-
     app.post("/products", async (req, res) => {
       const item = await productCollection.insertOne(req.body);
       res.send(item);
@@ -78,13 +77,14 @@ const run = async () => {
       console.log(item);
     });
 
-    // app.get("/reviews/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: ObjectId(id) };
-    //   const product = await reviewCollection.findOne(query);
-    //   res.send(product);
-    //   console.log(product);
-    // });
+    app.get("/reviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const product = await reviewCollection.findOne(query);
+      res.send(product);
+      console.log(product);
+    });
+    // review data modify
 
     app.put("/reviews/:id", async (req, res) => {
       const id = req.params.id;
@@ -102,8 +102,9 @@ const run = async () => {
       );
       res.send(result);
       console.log(req.body);
-    });
+    });     
 
+    // review data delete 
     app.delete("/reviews/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -111,6 +112,7 @@ const run = async () => {
       res.send(result);
       console.log(result);
     });
+
   } finally {
   }
 };
